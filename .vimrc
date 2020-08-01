@@ -1,167 +1,87 @@
-" Beginners .vimrc
-" v0.1 2012-10-22 Philip Thrasher
-"
-" Important things for beginners:
-" * Start out small... Don't jam your vimrc full of things you're not ready to
-"   immediately use.
-" * Read other people's vimrc's.
-" * Use a plugin manager for christ's sake! (I highly recommend vundle)
-" * Spend time configuring your editor... It's important. Its the tool you
-"   spend 8 hours a day crafting your reputation.
-" * remap stupid things to new keys that make you more efficient.
-" * Don't listen to the haters that complain about using non-default
-"   key-bindings. Their argument is weak. I spend most of my time in the editor
-"   on my computer, not others, so I don't care if customizing vim means I'll
-"   have a harder time using remote vim.
-"
-" Below I've left some suggestions of good default settings to have in a bare
-" minimal vimrc. You only what you want to use, and nothing more. I've heavily
-" commented each, and these are what I consider bare necessities, my workflow
-" absolutely depends on these things.
-"
-" If you have any questions, email me at pthrash@me.com
+" Comments in Vimscript start with a `"`.
 
-" Setup Vundle:
-" For this to work, you must install the vundle plugin manually.
-" https://github.com/gmarik/vundle
-" To install vundle, copy all the files from the repo into your respective
-" folders within ~/.vim
-set nocompatible " Fuck VI... That's for grandpas.
-filetype off
+" If you open this file in Vim, it'll be syntax highlighted for you.
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#rc()
+" Vim is based on Vi. Setting `nocompatible` switches from the default
+" Vi-compatibility mode and enables useful Vim functionality. This
+" configuration option turns out not to be necessary for the file named
+" '~/.vimrc', because Vim automatically enters nocompatible mode if that file
+" is present. But we're including it here just in case this config file is
+" loaded some other way (e.g. saved as `foo`, and then Vim started with
+" `vim -u foo`).
+set nocompatible
 
-" Vundle let's you specify a plugin in a number of formats, but my favorite
-" allows you to grab plugins straight off of github, just specify the bundle
-" in the following format:
-" Bundle 'githubUsername/repoName'
+" Turn on syntax highlighting.
+syntax on
 
-" Let vundle manage itself:
-Bundle 'gmarik/vundle'
+" Disable the default Vim startup message.
+set shortmess+=I
 
-" Just a shitload of color schemes.
-" https://github.com/flazz/vim-colorschemes#current-colorschemes
-Bundle 'flazz/vim-colorschemes'
+" Show line numbers.
+set number
 
-" Fuzzy finder -- absolutely must have.
-Bundle 'kien/ctrlp.vim'
+" This enables relative line numbering mode. With both number and
+" relativenumber enabled, the current line shows the true line number, while
+" all other lines (above and below) are numbered relative to the current line.
+" This is useful because you can tell, at a glance, what count is needed to
+" jump up or down to a particular line, by {count}k to go up or {count}j to go
+" down.
+set relativenumber
 
-" Support for easily toggling comments.
-Bundle 'tpope/vim-commentary'
+" Always show the status line at the bottom, even if you only have one window open.
+set laststatus=2
 
-" In addtion to the above plugins, you'll likely need some for individual
-" non-standard syntaxes that aren't pre-bundled with vim. Here are some I use,
-" these are required for me, but depending on what code you write, obviously
-" this may differ for you.
+" The backspace key has slightly unintuitive behavior by default. For example,
+" by default, you can't backspace before the insertion point set with 'i'.
+" This configuration makes backspace behave more reasonably, in that you can
+" backspace over anything.
+set backspace=indent,eol,start
 
-" Proper JSON filetype detection, and support.
-Bundle 'leshill/vim-json'
+" By default, Vim doesn't let you hide a buffer (i.e. have a buffer that isn't
+" shown in any window) that has unsaved changes. This is to prevent you from "
+" forgetting about unsaved changes and then quitting e.g. via `:qa!`. We find
+" hidden buffers helpful enough to disable this protection. See `:help hidden`
+" for more information on this.
+set hidden
 
-" vim already has syntax support for javascript, but the indent support is
-" horrid. This fixes that.
-Bundle 'pangloss/vim-javascript'
+" This setting makes search case-insensitive when all characters in the string
+" being searched are lowercase. However, the search becomes case-sensitive if
+" it contains any capital letters. This makes searching more convenient.
+set ignorecase
+set smartcase
 
-" vim indents HTML very poorly on it's own. This fixes a lot of that.
-Bundle 'indenthtml.vim'
+" Enable searching as you type, rather than waiting till you press enter.
+set incsearch
 
-" I write markdown a lot. This is a good syntax.
-Bundle 'tpope/vim-markdown'
+" Unbind some useless/annoying default key bindings.
+nmap Q <Nop> " 'Q' in normal mode enters Ex mode. You almost never want this.
 
-" LessCSS -- I use this every day.
-Bundle 'groenewege/vim-less'
+" Disable audible bell because it's annoying.
+set noerrorbells visualbell t_vb=
 
-" Coffee-script syntax.
-Bundle 'kchmck/vim-coffee-script'
+" Enable mouse support. You should avoid relying on this too much, but it can
+" sometimes be convenient.
+set mouse+=a
 
-
-" We have to turn this stuff back on if we want all of our features.
-filetype plugin indent on " Filetype auto-detection
-syntax on " Syntax highlighting
+" Try to prevent bad habits like using the arrow keys for movement. This is
+" not the only possible bad habit. For example, holding down the h/j/k/l keys
+" for movement, rather than using more efficient movement commands, is also a
+" bad habit. The former is enforceable through a .vimrc, while we don't know
+" how to prevent the latter.
+" Do this in normal mode...
+nnoremap <Left>  :echoe "Use h"<CR>
+nnoremap <Right> :echoe "Use l"<CR>
+nnoremap <Up>    :echoe "Use k"<CR>
+nnoremap <Down>  :echoe "Use j"<CR>
+" ...and in insert mode
+inoremap <Left>  <ESC>:echoe "Use h"<CR>
+inoremap <Right> <ESC>:echoe "Use l"<CR>
+inoremap <Up>    <ESC>:echoe "Use k"<CR>
+inoremap <Down>  <ESC>:echoe "Use j"<CR>
 
 set tabstop=4
 set shiftwidth=4
-set softtabstop=4
-set expandtab " use spaces instead of tabs.
-set smarttab " let's tab key insert 'tab stops', and bksp deletes tabs.
-set shiftround " tab / shifting moves to closest tabstop.
-set autoindent " Match indents on new lines.
-set smartindent " Intellegently dedent / indent new lines based on rules.
+set expandtab
 
-" We have VCS -- we don't need this stuff.
-set nobackup " We have vcs, we don't need backups.
-set nowritebackup " We have vcs, we don't need backups.
-set noswapfile " They're just annoying. Who likes them?
-
-" don't nag me when hiding buffers
-set hidden " allow me to have buffers with unsaved changes.
-set autoread " when a file has changed on disk, just load it. Don't ask.
-
-" Make search more sane
-set ignorecase " case insensitive search
-set smartcase " If there are uppercase letters, become case-sensitive.
-set incsearch " live incremental searching
-set showmatch " live match highlighting
-set hlsearch " highlight matches
-set gdefault " use the `g` flag by default.
-
-" allow the cursor to go anywhere in visual block mode.
-set virtualedit+=block
-
-" leader is a key that allows you to have your own "namespace" of keybindings.
-" You'll see it a lot below as <leader>
-let mapleader = ","
-
-
-" So we don't have to press shift when we want to get into command mode.
 nnoremap ; :
-vnoremap ; :
 
-" So we don't have to reach for escape to leave insert mode.
-inoremap jf <esc>
-
-" create new vsplit, and switch to it.
-noremap <leader>v <C-w>v
-
-" bindings for easy split nav
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
-
-" Use sane regex's when searching
-nnoremap / /\v
-vnoremap / /\v
-
-" Clear match highlighting
-noremap <leader><space> :noh<cr>:call clearmatches()<cr>
-
-" Quick buffer switching - like cmd-tab'ing
-nnoremap <leader><leader> <c-^>
-
-
-" Visual line nav, not real line nav
-" If you wrap lines, vim by default won't let you move down one line to the
-" wrapped portion. This fixes that.
-noremap j gj
-noremap k gk
-
-" Plugin settings:
-" Below are some 'sane' (IMHO) defaults for a couple of the above plugins I
-" referenced.
-
-" Map the key for toggling comments with vim-commentary
-nnoremap <leader>c <Plug>CommentaryLine
-
-" Remap ctrlp to ctrl-t -- map it however you like, or stick with the
-" defaults. Additionally, in my OS, I remap caps lock to control. I never use
-" caps lock. This is highly recommended.
-let g:ctrlp_map = '<c-t>'
-
-" Let ctrlp have up to 30 results.
-let g:ctrlp_max_height = 30
-
-
-" Finally the color scheme. Choose whichever you want from the list in the
-" link above (back up where we included the bundle of a ton of themes.)
-colorscheme evening
