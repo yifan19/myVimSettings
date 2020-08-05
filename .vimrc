@@ -83,5 +83,6 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
+" remapping ; to : in normal mode
 nnoremap ; :
 
